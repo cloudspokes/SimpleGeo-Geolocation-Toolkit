@@ -1,0 +1,88 @@
+<apex:component >
+    <apex:attribute name="uniqueName" type="String" description="x" required="true"/>
+    <apex:attribute name="paginator" type="al.ObjectPaginator" description="x" required="true"/>
+    <apex:attribute name="reRender" type="String" description="x" required="true"/>
+    <apex:attribute name="status" type="String" description="x" required="true"/>
+
+    <apex:outputPanel layout="block">
+        <!-- ========================================== -->
+        <!-- PAGE X OF X IN X RESULTS -->
+        <!-- ========================================== -->
+        Page {!IF(paginator.pageCount=0, 0, paginator.pageNumberDisplayFriendly)} of {!paginator.pageCount} in {!paginator.recordCount} results
+        &nbsp;&nbsp;
+        
+        <!-- ========================================== -->
+        <!-- FIRST                                   -->
+        <!-- ========================================== -->
+        <apex:outputText value="First" 
+          rendered="{!NOT(paginator.hasPrevious)}"
+        />
+        <apex:commandLink value="First" 
+            rendered="{!paginator.hasPrevious}"
+            action="{!paginator.first}"
+            reRender="{!reRender}" 
+            status="{!status}"
+        />
+        &nbsp;&nbsp;
+        
+        <!-- ========================================== -->
+        <!-- PREVIOUS                                   -->
+        <!-- ========================================== -->
+        <apex:outputText value="Previous" 
+            rendered="{!NOT(paginator.hasPrevious)}"
+        />
+        <apex:commandLink value="Previous" 
+            rendered="{!paginator.hasPrevious}"
+            action="{!paginator.previous}"
+            reRender="{!reRender}" 
+            status="{!status}"
+        />
+        &nbsp;&nbsp;
+        
+        
+        
+        <!-- ========================================== -->
+        <!-- NEXT                                       -->
+        <!-- ========================================== -->
+        <apex:outputText value="Next" 
+            rendered="{!NOT(paginator.hasNext)}"
+        />
+        <apex:commandLink value="Next" 
+            rendered="{!paginator.hasNext}"
+            action="{!paginator.next}"
+            reRender="{!reRender}" 
+            status="{!status}"
+        />
+        &nbsp;&nbsp;
+        
+        <!-- ========================================== -->
+        <!-- LAST                                       -->
+        <!-- ========================================== -->
+        <apex:outputText value="Last" 
+            rendered="{!NOT(paginator.hasNext)}"
+        />
+        <apex:commandLink value="Last" 
+            rendered="{!paginator.hasNext}"
+            action="{!paginator.last}"
+            reRender="{!reRender}" 
+            status="{!status}"
+        />
+        &nbsp;&nbsp;
+        
+        <!-- ========================================== -->
+        <!-- Page Size Options                          -->
+        <!-- ========================================== -->
+        Page Size:
+        <apex:selectList value="{!paginator.pageSize}" 
+            size="1"
+            onchange="javascript: skipToPageNone{!uniqueName}();">
+        <apex:selectOptions value="{!paginator.pageSizeOptions}" />
+        </apex:selectList>
+        <apex:actionFunction name="skipToPageNone{!uniqueName}" 
+            action="{!paginator.first}"
+            reRender="{!reRender}" 
+            status="{!status}"
+        /> 
+    
+    </apex:outputPanel>
+</apex:component>

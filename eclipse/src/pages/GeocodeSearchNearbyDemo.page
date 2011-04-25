@@ -1,0 +1,76 @@
+<apex:page controller="GeocodeSearchNearbyDemoController">
+    <apex:sectionHeader title="Search Nearby"/>
+
+    <apex:pageMessages id="Messages" showDetail="true"/>
+
+    <apex:form id="theForm">
+        <apex:outputPanel id="SearchForm">
+            <apex:outputPanel >
+                <apex:actionStatus startText="Searching..." stopText="" id="doSearchStatus"/>
+                <apex:pageBlock title="Search Form" mode="view">
+                    <apex:pageBlockButtons >
+                        <apex:commandButton action="{!doSearchNearby}" 
+                            value="Search"
+                            reRender="Results,Messages"
+                            status="doSearchStatus"
+                        />
+                    </apex:pageBlockButtons>
+                    <apex:pageBlockSection title="Search" showHeader="true" columns="2">
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel value="Address" for="address"/>
+                            <apex:inputText value="{!addressInput}"/> 
+                        </apex:pageBlockSectionItem>
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel value="Distance" for="distance"/>
+                            <apex:outputPanel layout="block">
+	                            <apex:selectList id="distance" value="{!distance}" size="1">
+	                                <apex:selectOptions value="{!distanceOptions}"/>
+	                            </apex:selectList>
+	                            <apex:selectList id="unit" value="{!unit}" size="1">
+	                                <apex:selectOptions value="{!unitOptions}"/>
+	                            </apex:selectList>
+                            </apex:outputPanel>
+                        </apex:pageBlockSectionItem>
+                        
+                    </apex:pageBlockSection>
+                    <apex:pageBlockSection title="Configuration" showHeader="true" columns="2">
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel value="Latitude Field Name" for="latitudeFieldName"/>
+                            <apex:inputText value="{!latitudeFieldName}"/>
+                        </apex:pageBlockSectionItem>
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel value="Longitude Field Name" for="longitudeFieldName"/>
+                            <apex:inputText value="{!longitudeFieldName}"/>
+                        </apex:pageBlockSectionItem>
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel value="Object Name" for="objectName"/>
+                            <apex:inputText value="{!objectName}"/>
+                        </apex:pageBlockSectionItem>
+                    </apex:pageBlockSection>
+                </apex:pageBlock>
+            </apex:outputPanel>
+        </apex:outputPanel>
+
+        <apex:outputPanel id="Results">
+            <apex:outputPanel rendered="{!searchExecuted}">
+                <apex:actionStatus startText="Updating..." stopText="" id="doPaginationChangeStatus"/>
+                <apex:pageBlock title="Results" mode="view">
+                    <apex:pageBlockTable value="{!results}" var="result">
+                        <apex:column headerValue="Record Name"><a href="/{!result.id}">{!result.name}</a></apex:column>
+                        <apex:column headerValue="Distance (KM)" value="{!result.distanceInKilometers}"/>
+                        <apex:column headerValue="Latitude" value="{!result.point.latitude}"/>
+                        <apex:column headerValue="Longitude" value="{!result.point.longitude}"/>
+                        <apex:facet name="header">
+                            <c:PaginationControls paginator="{!paginator}"
+                                reRender="Results,Messages"
+                                status="doPaginationChangeStatus"
+                                uniqueName="ResultsPaginator"
+                            />
+                        </apex:facet>
+                    </apex:pageBlockTable> 
+                </apex:pageBlock>
+            </apex:outputPanel>        
+        </apex:outputPanel>
+        
+    </apex:form>               
+</apex:page>
